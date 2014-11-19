@@ -1,22 +1,22 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2008-2012 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2012 The OpenNMS Group, Inc.
+ * Copyright (C) 2006-2014 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2014 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published
+ * it under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License,
  * or (at your option) any later version.
  *
  * OpenNMS(R) is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with OpenNMS(R).  If not, see:
  *      http://www.gnu.org/licenses/
  *
@@ -128,21 +128,25 @@ public class SnmpAttribute extends AbstractCollectionAttribute {
             return null;
         } else if (getValue().isNumeric()) {
             return Long.toString(getValue().toLong());
-        } else if (getValue().getBytes().length == 8) {
-            return Long.toString(SnmpUtils.getProtoCounter64Value(getValue()));
         } else {
+            // Check to see if this is a 63-bit counter packed into an octetstring
+            Long value = SnmpUtils.getProtoCounter63Value(getValue());
+            if (value != null) {
+                return value.toString();
+            }
+
             try {
                 return Double.valueOf(getValue().toString()).toString();
             } catch(NumberFormatException e) {
                 LOG.trace("Unable to process data received for attribute {} maybe this is not a number? See bug 1473 for more information. Skipping.", this);
-		if (getValue().getType() == SnmpValue.SNMP_OCTET_STRING) {
-		    try {
-			return Long.valueOf(getValue().toHexString(), 16).toString();
-		    } catch(NumberFormatException ex) {
-			LOG.trace("Unable to process data received for attribute {} maybe this is not a number? See bug 1473 for more information. Skipping.", this);
-		    }
-		}
-	    }
+                if (getValue().getType() == SnmpValue.SNMP_OCTET_STRING) {
+                    try {
+                        return Long.valueOf(getValue().toHexString(), 16).toString();
+                    } catch(NumberFormatException ex) {
+                        LOG.trace("Unable to process data received for attribute {} maybe this is not a number? See bug 1473 for more information. Skipping.", this);
+                    }
+                }
+            }
             return null;
         }
     }

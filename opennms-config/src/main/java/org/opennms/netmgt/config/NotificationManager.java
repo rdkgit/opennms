@@ -1,22 +1,22 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2012-2014 The OpenNMS Group, Inc.
+ * Copyright (C) 2002-2014 The OpenNMS Group, Inc.
  * OpenNMS(R) is Copyright (C) 1999-2014 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published
+ * it under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License,
  * or (at your option) any later version.
  *
  * OpenNMS(R) is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with OpenNMS(R).  If not, see:
  *      http://www.gnu.org/licenses/
  *
@@ -264,7 +264,7 @@ public abstract class NotificationManager {
 
         for (Notification curNotif : m_notifications.getNotificationCollection()) {
 
-            LOG.debug("Checking {} against {}", curNotif.getUei(), event.getUei());
+            LOG.debug("Checking notification {} against event {} with UEI {}", curNotif.getUei(), event.getDbid(), event.getUei());
 
             if (event.getUei().equals(curNotif.getUei()) || "MATCH-ANY-UEI".equals(curNotif.getUei())) {
                 // Match!
@@ -278,7 +278,7 @@ public abstract class NotificationManager {
                 }
             } else {
 
-                LOG.debug("Event UEI {} did not match {}", curNotif.getUei(), event.getUei());
+                LOG.debug("Notification UEI {} did not match UEI of event {}: {}", curNotif.getUei(), event.getDbid(), event.getUei());
                 continue;
             }
 
@@ -327,7 +327,7 @@ public abstract class NotificationManager {
                 }
             } else {
 
-                LOG.debug("Current notification is turned off.");
+                LOG.debug("Current notification with UEI {} is turned off.", curNotif.getUei());
             }
         }
 

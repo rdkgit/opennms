@@ -1,22 +1,22 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2011-2012 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2012 The OpenNMS Group, Inc.
+ * Copyright (C) 2013-2014 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2014 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published
+ * it under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License,
  * or (at your option) any later version.
  *
  * OpenNMS(R) is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with OpenNMS(R).  If not, see:
  *      http://www.gnu.org/licenses/
  *
@@ -29,8 +29,11 @@
 package org.opennms.smoketest;
 
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AdminSnmpConfigForIpPageTest extends OpenNMSSeleniumTestCase {
 
     @Before
@@ -50,7 +53,7 @@ public class AdminSnmpConfigForIpPageTest extends OpenNMSSeleniumTestCase {
      * Tests if getting the current snmp configuration for a specific ip address works.
      */
     @Test
-    public void testGetIpInformation() {
+    public void a_testGetIpInformation() {
     	// v2c
     	selenium.type("name=ipAddress",  "1.1.1.1");
     	selenium.click("name=getConfig");
@@ -84,6 +87,11 @@ public class AdminSnmpConfigForIpPageTest extends OpenNMSSeleniumTestCase {
     	gotoPage();
     	selenium.type("name=firstIPAddress",  "1.2.3.4");
     	selenium.select("name=version", "v3");
+    	selenium.select("name=securityLevel", "authNoPriv");
+    	selenium.type("name=authPassPhrase", "authMe!");
+    	selenium.select("name=authProtocol", "MD5");
+    	selenium.type("name=privPassPhrase", "privMe!");
+    	selenium.select("name=privProtocol", "DES");
     	selenium.click("name=saveConfig");
     	waitForPageToLoad();
     	selenium.type("name=ipAddress",  "1.2.3.4");
@@ -103,11 +111,11 @@ public class AdminSnmpConfigForIpPageTest extends OpenNMSSeleniumTestCase {
     	assertEquals("", selenium.getValue("name=readCommunityString"));
     	assertEquals("", selenium.getValue("name=writeCommunityString"));
     	assertEquals("opennmsUser", selenium.getValue("name=securityName"));
-    	assertEquals("1", selenium.getValue("name=securityLevel")); //authNoPriv
-    	assertEquals("", selenium.getValue("name=authPassPhrase"));
-    	assertEquals("", selenium.getValue("name=authProtocol"));
-    	assertEquals("", selenium.getValue("name=privPassPhrase"));
-    	assertEquals("", selenium.getValue("name=privProtocol"));
+    	assertEquals("2", selenium.getValue("name=securityLevel")); //authNoPriv
+    	assertEquals("authMe!", selenium.getValue("name=authPassPhrase"));
+    	assertEquals("MD5", selenium.getValue("name=authProtocol"));
+   	assertEquals("privMe!", selenium.getValue("name=privPassPhrase"));
+    	assertEquals("DES", selenium.getValue("name=privProtocol"));
     	assertEquals("", selenium.getValue("name=engineId"));
     	assertEquals("", selenium.getValue("name=contextEngineId"));
     	assertEquals("", selenium.getValue("name=contextName"));
@@ -119,7 +127,7 @@ public class AdminSnmpConfigForIpPageTest extends OpenNMSSeleniumTestCase {
      * Tests that only one "version specifics" area is visible at the time. 
      */
     @Test
-    public void testVersionHandling() {
+    public void b_testVersionHandling() {
     	assertEquals("v2c", selenium.getValue("name=version"));
     	assertTrue(selenium.isTextPresent("v1/v2c specific parameters"));
     	assertFalse(selenium.isTextPresent("v3 specific parameters"));
@@ -140,7 +148,7 @@ public class AdminSnmpConfigForIpPageTest extends OpenNMSSeleniumTestCase {
      * 
      */
     @Test
-    public void testIntegerValidation() {
+    public void c_testIntegerValidation() {
     	final String defaultValidationErrorTemplate = "%s is not a valid %s. Please enter a number greater than 0 or leave it empty.";
     	final String maxRequestSizeErrorTemplate = "%s is not a valid %s. Please enter a number greater or equal than 484 or leave it empty.";
     	final String[] integerFields = new String[]{
@@ -213,7 +221,7 @@ public class AdminSnmpConfigForIpPageTest extends OpenNMSSeleniumTestCase {
      * @throws Exception
      */
     @Test
-    public void testIpValidation() throws Exception {
+    public void d_testIpValidation() throws Exception {
         // empty first and last ip
         selenium.type("name=firstIPAddress", "");
         selenium.type("name=lastIPAddress", "");
@@ -266,7 +274,7 @@ public class AdminSnmpConfigForIpPageTest extends OpenNMSSeleniumTestCase {
      * Tests that the cancel button works as expected.
      */
     @Test
-    public void testCancelButton() {
+    public void e_testCancelButton() {
     	selenium.click("name=cancelButton");
     	waitForPageToLoad();
     	assertTrue(selenium.isTextPresent("OpenNMS System"));
@@ -285,7 +293,7 @@ public class AdminSnmpConfigForIpPageTest extends OpenNMSSeleniumTestCase {
      * Tests that one or both save options can be selected, but that there must be at least one selection.
      */
     @Test
-    public void testSaveOptions() {
+    public void f_testSaveOptions() {
     	// OK 
     	selenium.type("name=firstIPAddress", "1.1.1.1");
     	selenium.check("id=sendEventOption");
@@ -323,7 +331,7 @@ public class AdminSnmpConfigForIpPageTest extends OpenNMSSeleniumTestCase {
     	selenium.click("name=saveConfig");
     	waitForPageToLoad();
         assertTrue(selenium.isAlertPresent());
-        assertEquals("You must select either 'send Event' or 'save locally'. It is possible to select both options.", selenium.getAlert());
+        assertEquals("You must select either 'Send Event' or 'Save Locally'. It is possible to select both options.", selenium.getAlert());
     }
     
 }

@@ -1,22 +1,22 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2013 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2013 The OpenNMS Group, Inc.
+ * Copyright (C) 2013-2014 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2014 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published
+ * it under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License,
  * or (at your option) any later version.
  *
  * OpenNMS(R) is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with OpenNMS(R).  If not, see:
  *      http://www.gnu.org/licenses/
  *
@@ -29,10 +29,13 @@
 package org.opennms.smoketest;
 
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MenuHeaderTest extends OpenNMSSeleniumTestCase {
     private static final Logger LOG = LoggerFactory.getLogger(MenuHeaderTest.class);
 
@@ -43,28 +46,28 @@ public class MenuHeaderTest extends OpenNMSSeleniumTestCase {
     }
 
     @Test
-    public void testNodeLink() throws Exception {
+    public void a_testNodeLink() throws Exception {
         clickAndWait("link=Node List");
         assertTrue(selenium.isTextPresent("/ Node List") || selenium.isTextPresent("Node Interfaces"));
     }
 
     @Test
-    public void testSearchLink() throws Exception {
+    public void b_testSearchLink() throws Exception {
         clickAndVerifyText("link=Search", "Search for Nodes");
     }
 
     @Test
-    public void testOutagesLink() throws Exception {
+    public void c_testOutagesLink() throws Exception {
         clickAndVerifyText("link=Outages", "Outage Menu");
     }
 
     @Test
-    public void testPathOutagesLink() throws Exception {
-        clickAndVerifyText("link=Path Outages", "All path outages");
+    public void d_testPathOutagesLink() throws Exception {
+        clickAndVerifyText("link=Path Outages", "All Path Outages");
     }
 
     @Test
-    public void testDashboardLink() throws Exception {
+    public void e_testDashboardLink() throws Exception {
         if (selenium.isElementPresent("//a[@href='dashboards.htm']")) {
             // new style dashboard menu
             clickAndWait("//a[@href='dashboards.htm']");
@@ -89,43 +92,43 @@ public class MenuHeaderTest extends OpenNMSSeleniumTestCase {
     }
 
     @Test
-    public void testEventsLink() {
+    public void f_testEventsLink() {
         clickAndVerifyText("link=Events", "Event Queries");
     }
 
     @Test
-    public void testAlarmsLink() {
+    public void g_testAlarmsLink() {
         clickAndVerifyText("link=Alarms", "Alarm Queries");
     }
 
     @Test
-    public void testNotificationsLink() {
+    public void h_testNotificationsLink() {
         clickAndVerifyText("link=Notifications", "Notification queries");
     }
 
     @Test
-    public void testAssetsLink() {
+    public void i_testAssetsLink() {
         clickAndVerifyText("link=Assets", "Search Asset Information");
     }
 
     @Test
-    public void testReportsLink() {
+    public void j_testReportsLink() {
         clickAndVerifyText("link=Reports", "Resource Graphs");
     }
 
     @Test
-    public void testChartsLink() {
+    public void k_testChartsLink() {
         clickAndVerifyText("link=Charts", "/ Charts");
     }
 
     @Test
-    public void testSurveillanceLink() throws InterruptedException {
+    public void l_testSurveillanceLink() throws InterruptedException {
         clickAndWait("link=Surveillance");
         waitForText("Surveillance View:", LOAD_TIMEOUT);
     }
 
     @Test
-    public void testDistributedStatusLink() {
+    public void m_testDistributedStatusLink() {
         clickAndWait("link=Distributed Status");
         assertTrue(selenium.isTextPresent("Distributed Status Summary") || selenium.isTextPresent("No applications have been defined for this system"));
     }
@@ -137,7 +140,7 @@ public class MenuHeaderTest extends OpenNMSSeleniumTestCase {
     }
 
     @Test
-    public void testDistributedMapLink() throws Exception {
+    public void n_testDistributedMapLink() throws Exception {
         goToMapsPage();
         clickAndWait("//div[@id='content']//a[contains(text(), 'Distributed')]");
         Thread.sleep(1000);
@@ -146,7 +149,7 @@ public class MenuHeaderTest extends OpenNMSSeleniumTestCase {
     }
     
     @Test
-    public void testTopologyMapLink() throws Exception {
+    public void o_testTopologyMapLink() throws Exception {
         // the vaadin apps are finicky
         goToMapsPage();
         clickAndWait("//div[@id='content']//a[contains(text(), 'Topology')]");
@@ -158,7 +161,7 @@ public class MenuHeaderTest extends OpenNMSSeleniumTestCase {
     }
     
     @Test
-    public void testGeographicalMapLink() throws Exception {
+    public void p_testGeographicalMapLink() throws Exception {
         goToMapsPage();
         clickAndWait("//div[@id='content']//a[contains(text(), 'Geographical')]");
         waitForHtmlSource("vaadin", 20000, true);
@@ -167,19 +170,19 @@ public class MenuHeaderTest extends OpenNMSSeleniumTestCase {
     }
     
     @Test
-    public void testSvgMapLink() throws Exception {
+    public void q_testSvgMapLink() throws Exception {
         goToMapsPage();
         clickAndWait("//div[@id='content']//a[contains(text(), 'SVG')]");
         waitForText("/ Network Topology Maps", LOAD_TIMEOUT);
     }
 
     @Test
-    public void testAdminLink() {
+    public void r_testAdminLink() {
         clickAndVerifyText("link=Admin", "Configure Users, Groups and On-Call Roles");
     }
 
     @Test
-    public void testSupportLink() throws Exception {
+    public void s_testSupportLink() throws Exception {
         clickAndVerifyText("link=Support", "Enter your OpenNMS Group commercial support login");
     }
 
