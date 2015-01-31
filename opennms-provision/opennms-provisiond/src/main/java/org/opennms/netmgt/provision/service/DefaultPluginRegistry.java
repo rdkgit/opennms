@@ -131,9 +131,7 @@ public class DefaultPluginRegistry implements PluginRegistry, InitializingBean {
     /** {@inheritDoc} */
     @Override
     public <T> T getPluginInstance(Class<T> pluginClass, PluginConfig pluginConfig) {
-
         T pluginInstance = beanWithNameOfType(pluginConfig.getPluginClass(), pluginClass);
-
         if (pluginInstance == null) {
             return null;
         }
@@ -155,9 +153,7 @@ public class DefaultPluginRegistry implements PluginRegistry, InitializingBean {
     }
     
     private <T> T beanWithNameOfType(String beanName, Class<T> pluginClass) {
-
         Map<String, T> beans = beansOfType(pluginClass);
-
         T bean = beans.get(beanName);
 
         if (bean != null) {
